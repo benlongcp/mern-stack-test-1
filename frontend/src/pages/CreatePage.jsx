@@ -1,22 +1,47 @@
-import React from 'react'
-import { useState } from 'react'
 import { Container, VStack, Heading, Box, Input, Button } from '@chakra-ui/react'
+import { useToast } from '@chakra-ui/toast'
+import { useState, React } from 'react'
 import { useProductStore } from '../store/product'
 
+
+
 const CreatePage = () => {
-
-
+  
+  
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
     image: "",
   })
-
+  
+  const toast = useToast()
   const { createProduct } = useProductStore()
 
   const handleAddProduct = async() =>{
     const { success, message } = await createProduct(newProduct)
     console.log("success", success, "\n message", message)
+
+    if (!success) {
+      
+      console.log("hello")
+
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        isClosable: true
+      })
+    } else {
+      console.log("good bye")
+       toast({
+        title: "Success",
+        description: message,
+        status: "success",
+        isClosable: true
+      })
+
+    }
+    setNewProduct({name: "", price: "", image: ""});
   }
 
   return (
